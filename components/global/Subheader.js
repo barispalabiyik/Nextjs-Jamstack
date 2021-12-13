@@ -2,6 +2,7 @@ import React from "react";
 
 export default function Subheader(props) {
   const { subHeaderTitle } = props;
+  const { breadcrumbData } = props;
   return (
     <div>
       <div className="bg-indigo-600 h-24 flex flex-col justify-center items-center">
@@ -23,7 +24,7 @@ export default function Subheader(props) {
           <li>
             <span class="mx-2">/</span>
           </li>
-          <li>Data</li>
+          <li className="uppercase">{breadcrumbData}</li>
         </ol>
       </div>
     </div>

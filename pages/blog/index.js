@@ -3,11 +3,20 @@ import Head from "next/head";
 import Subheader from "../../components/global/Subheader";
 import { request } from "../../lib/datocms";
 import BlogCard from "../../components/BlogCard";
-import { WEB_CATEGORY_QUERY } from "../../data/dato_posts";
+import { ALLPOSTS_QUERY } from "../../data/dato_posts";
 
+export async function getStaticProps() {
+  const data = await request({
+    query: ALLPOSTS_QUERY,
+  });
+  return {
+    props: { data },
+  };
+}
 
-export default function web({Catdata}) {
-  const blogData = Catdata.allArticles;
+export default function blog(props) {
+  const { data } = props;
+  const blogData = data.allArticles;
   return (
     <div>
       <Head>
@@ -36,15 +45,3 @@ export default function web({Catdata}) {
     </div>
   );
 }
-
-
-
-export async function getStaticProps() {
-    const Catdata = await request({
-      query: WEB_CATEGORY_QUERY
-    });
-    return {
-      props: { Catdata },
-    };
-  }
-  

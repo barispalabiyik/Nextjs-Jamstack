@@ -1,9 +1,10 @@
 import { Image, StructuredText } from "react-datocms";
-import { request } from "../../lib/datocms";
-import { BLOG_QUERY, PATHS_QUERY } from "../../data/dato_posts";
+import { request } from "../../../../lib/datocms";
+import { BLOG_QUERY, PATHS_QUERY } from "../../../../data/dato_posts";
 import Link from "next/link";
 
-export default function BlogPost({postData}) {
+export default function BlogPost({ postData }) {
+  console.log(postData.author.authorname);
   return (
     <>
       <div className="max-w-7xl mx-auto flex flex-wrap py-6">
@@ -14,7 +15,7 @@ export default function BlogPost({postData}) {
               <ol className="list-reset flex text-grey-dark">
                 <li>
                   <a href="/" className="font-bold">
-                    Home
+                    Anasayfa
                   </a>
                 </li>
                 <li>
@@ -28,19 +29,23 @@ export default function BlogPost({postData}) {
                 <li>
                   <span className="mx-2">{">"}</span>
                 </li>
-                <li><Link href="/web" ><a className="font-bold text-indigo-600">{postData.kategori.name}</a></Link></li>
-                
+                <li>
+                  <Link href={`/blog/${postData.kategori.sayfa}`}>
+                    <a className="font-bold text-indigo-600">
+                      {postData.kategori.name}
+                    </a>
+                  </Link>
+                </li>
               </ol>
-              
+
               <h1 className="text-3xl font-bold hover:text-gray-700 pb-4">
                 {postData.title}
               </h1>
               <p href="#" className="text-sm pb-8">
-                Yazan:  {" "}
-                <a href="#" className="font-semibold hover:text-gray-800">
-                {postData.yazar}
-                </a>
-                , Yayın Tarihi: {postData.publishDate}
+                Yazan:{" "}
+                <a href={`/yazar/${postData.author.authorLink}`} className="font-semibold hover:text-gray-800">
+                  {postData.author.authorname}</a>,
+                Yayın Tarihi: {postData.publishDate}
               </p>
               <StructuredText
                 data={postData.content}
@@ -79,13 +84,12 @@ export default function BlogPost({postData}) {
 
           <div className="w-full flex flex-col text-center md:text-left md:flex-row shadow bg-white mt-10 mb-10 p-6">
             <div className="w-full md:w-1/5 flex justify-center md:justify-start pb-4">
-              <img
-                src="https://source.unsplash.com/collection/1346951/150x150?sig=1"
-                className="rounded-full shadow h-32 w-32"
-              />
+                <Image className="rounded-full shadow h-32 w-32"  data={postData.author.gorsel.responsiveImage} />
             </div>
             <div className="flex-1 flex flex-col justify-center md:justify-start">
-              <p className="font-semibold text-2xl">{postData.author}</p>
+              <p className="font-semibold text-2xl">
+                {postData.author.authorname}
+              </p>
               <p className="pt-2">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Curabitur vel neque non libero suscipit suscipit eu eu urna.
@@ -179,24 +183,6 @@ export default function BlogPost({postData}) {
   );
 }
 
-
-export const getStaticPaths = async () => {
-  const slugQuery = await request({
-    query: PATHS_QUERY,
-  });
-
-  let paths = [];
-
-  slugQuery.allArticles.map((p) => paths.push(`/blog/${p.slug}`));
-
-  return {
-    paths,
-    fallback: false,
-  };
-};
-
-
-
 export const getStaticProps = async ({ params }) => {
   const post = await request({
     query: BLOG_QUERY,
@@ -206,5 +192,21 @@ export const getStaticProps = async ({ params }) => {
     props: {
       postData: post.article,
     },
+  };
+};
+
+export const getStaticPaths = async () => {
+  const slugQuery = await request({
+    query: PATHS_QUERY,
+  });
+
+  let paths = [];
+  slugQuery.allArticles.map((p) =>
+    paths.push(`/blog/${p.kategori.sayfa}/${p.slug}`)
+  );
+
+  return {
+    paths,
+    fallback: false,
   };
 };

@@ -4,10 +4,31 @@ const ALLPOSTS_QUERY = `query AllPostsQuery {
       slug
       title
       yazar
+      author {
+        authorname
+        authorLink
+        id
+        gorsel {
+          responsiveImage {
+            width
+            webpSrcSet
+            title
+            srcSet
+            src
+            sizes
+            height
+            bgColor
+            base64
+            aspectRatio
+            alt
+          }
+        }
+      }
       publishDate
       kategori {
         id
         name
+        sayfa
       }
       excerpt
       coverImage {
@@ -31,12 +52,32 @@ const ALLPOSTS_QUERY = `query AllPostsQuery {
 
 export { ALLPOSTS_QUERY };
 
-
 const BLOG_QUERY = `query MyQuery($slug: String) {
     article(filter: {slug: {eq: $slug}}) {
       kategori {
         id
         name
+        sayfa
+      }
+      author {
+        authorname
+        authorLink
+        id
+        gorsel {
+          responsiveImage {
+            width
+            webpSrcSet
+            title
+            srcSet
+            src
+            sizes
+            height
+            bgColor
+            base64
+            aspectRatio
+            alt
+          }
+        }
       }
       id
       publishDate
@@ -86,23 +127,25 @@ const BLOG_QUERY = `query MyQuery($slug: String) {
   }
   `;
 
-  export { BLOG_QUERY };
+export { BLOG_QUERY };
 
-
-  const PATHS_QUERY = `query MyQuery {
+const PATHS_QUERY = `query MyQuery {
     allArticles {
       slug
+      kategori {
+        sayfa
+      }
     }
   }
   `;
-export { PATHS_QUERY };  
+export { PATHS_QUERY };
 
-
-const WEB_CATEGORY_QUERY = `query AllPostsQuery{
-    allArticles (filter: {kategori: {eq: "85172372"}}) {
+const CATEGORY_DATA_QUERY = `query allCatPaths {
+  allArticles {
       kategori {
         id
         name
+        sayfa
       }
       id
       slug
@@ -128,37 +171,12 @@ const WEB_CATEGORY_QUERY = `query AllPostsQuery{
     }
   }`;
 
-export { WEB_CATEGORY_QUERY };
+export { CATEGORY_DATA_QUERY };
 
-
-const SEO_CATEGORY_QUERY = `query AllPostsQuery{
-  allArticles (filter: {kategori: {eq: "85172374"}}) {
-    kategori {
-      id
-      name
-    }
-    id
-    slug
-    title
-    publishDate
-    excerpt
-    coverImage {
-      responsiveImage {
-        alt
-        base64
-        bgColor
-        title
-        sizes
-        aspectRatio
-        height
-        width
-        webpSrcSet
-        srcSet
-        src
-      }
-    }
-
+const ALL_CAT_PATHS = `query allCatPaths {
+  allCategories {
+    sayfa
   }
 }`;
 
-export { SEO_CATEGORY_QUERY };
+export { ALL_CAT_PATHS };
