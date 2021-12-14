@@ -23,7 +23,7 @@ export default function blog(props) {
         <title>Dijitalfa Web Sitesi</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Subheader subHeaderTitle="Blog" />
+      <Subheader subHeaderTitle="Yazarlar" />
       <div className="max-w-7xl mx-auto grid grid-cols-4 ">
         <div className=" col-span-3 min-h-[600px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 mt-6 gap-y-8 justify-center mx-auto h-3/5 px-3 py-7">
           {blogData.map((post) => (

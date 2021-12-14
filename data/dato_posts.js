@@ -62,6 +62,7 @@ const BLOG_QUERY = `query MyQuery($slug: String) {
       author {
         authorname
         authorLink
+        aciklama
         id
         gorsel {
           responsiveImage {
