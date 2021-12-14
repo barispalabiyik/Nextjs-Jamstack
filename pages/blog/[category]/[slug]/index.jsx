@@ -2,41 +2,18 @@ import { Image, StructuredText } from "react-datocms";
 import { request } from "../../../../lib/datocms";
 import { BLOG_QUERY, PATHS_QUERY } from "../../../../data/dato_posts";
 import Link from "next/link";
+import BreadCrumbs from "../../../../components/BreadCrumbs";
 
 export default function BlogPost({ postData }) {
-  console.log(postData.author.authorname);
   return (
+    
     <>
       <div className="max-w-7xl mx-auto flex flex-wrap py-6">
         <section className="w-full md:w-2/3 flex flex-col items-center px-3">
           <article className="flex flex-col shadow rounded-md">
             <Image data={postData.coverImage.responsiveImage} />
             <div className="bg-white flex flex-col justify-start p-6">
-              <ol className="list-reset flex text-grey-dark">
-                <li>
-                  <a href="/" className="font-bold">
-                    Anasayfa
-                  </a>
-                </li>
-                <li>
-                  <span className="mx-2">{">"}</span>
-                </li>
-                <li>
-                  <a href="/blog" className="font-bold">
-                    Blog
-                  </a>
-                </li>
-                <li>
-                  <span className="mx-2">{">"}</span>
-                </li>
-                <li>
-                  <Link href={`/blog/${postData.kategori.sayfa}`}>
-                    <a className="font-bold text-indigo-600">
-                      {postData.kategori.name}
-                    </a>
-                  </Link>
-                </li>
-              </ol>
+              <BreadCrumbs categoryData = {postData.kategori.sayfa}  />
 
               <h1 className="text-3xl font-bold hover:text-gray-700 pb-4">
                 {postData.title}
