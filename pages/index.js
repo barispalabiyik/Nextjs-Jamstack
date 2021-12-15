@@ -1,5 +1,5 @@
 import Head from "next/head";
-import HeroWithForm from "../components/HeroWithForm";
+import Hero from "../components/Hero";
 import Alert from "../components/global/Alert";
 import Cta from "../components/global/Cta";
 import Features from "../components/Features";
@@ -38,7 +38,7 @@ export default function Home({data}) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {isIdle && <Alert/>}
-      <HeroWithForm />
+      <Hero />
       <Cta />
       <Features />
       <div className="max-w-7xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-8 justify-center mx-auto  px-3 py-7">

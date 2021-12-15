@@ -1,8 +1,7 @@
 import { Image, StructuredText } from "react-datocms";
-import { request } from "../../../../lib/datocms";
-import { BLOG_QUERY, PATHS_QUERY } from "../../../../data/dato_posts";
+import { request } from "../../lib/datocms";
+import { ALL_AUTHORS_PATHS, AUTHOR_DATA_QUERY} from "../../data/dato_posts";
 import Link from "next/link";
-import BreadCrumbs from "../../../../components/BreadCrumbs";
 
 export default function BlogPost({ postData }) {
   return (
@@ -11,30 +10,19 @@ export default function BlogPost({ postData }) {
       <div className="max-w-7xl mx-auto flex flex-wrap py-6">
         <section className="w-full md:w-2/3 flex flex-col items-center px-3">
           <article className="flex flex-col shadow rounded-md">
-            <Image data={postData.coverImage.responsiveImage} />
+            <Image data={postData.gorsel.responsiveImage} />
             <div className="bg-white flex flex-col justify-start p-6">
-              <BreadCrumbs categoryData = {postData.kategori.sayfa}  />
 
               <h1 className="text-3xl font-bold hover:text-gray-700 pb-4">
-                {postData.title}
+                {postData.authorname}
               </h1>
               <p href="#" className="text-sm pb-8">
                 Yazan:{" "}
-                <a href={`/yazarlar/${postData.author.authorLink}`} className="font-semibold hover:text-gray-800">
-                  {postData.author.authorname}</a>,
+                <a href={`/yazar/${postData.authorLink}`} className="font-semibold hover:text-gray-800">
+                  {postData.authorname}</a>,
                 Yayın Tarihi: {postData.publishDate}
               </p>
-              <StructuredText
-                data={postData.content}
-                renderBlock={({ record }) => {
-                  switch (record.__typename) {
-                    case "ImageRecord":
-                      return <Image data={record.image.responsiveImage} />;
-                    default:
-                      return null;
-                  }
-                }}
-              />
+              
             </div>
           </article>
 
@@ -59,33 +47,6 @@ export default function BlogPost({ postData }) {
             </a>
           </div>
 
-          <div className="w-full flex flex-col text-center md:text-left md:flex-row shadow bg-white mt-10 mb-10 p-6">
-            <div className="w-full md:w-1/5 flex justify-center md:justify-start pb-4">
-                <Image className="rounded-full h-32 w-32"  data={postData.author.gorsel.responsiveImage} />
-            </div>
-            <div className="flex-1 flex flex-col justify-center md:justify-start">
-              <p className="font-semibold text-2xl">
-                {postData.author.authorname}
-              </p>
-              <p className="pt-2">
-              {postData.author.aciklama}
-              </p>
-              <div className="flex items-center justify-center md:justify-start text-2xl no-underline text-indigo-800 pt-4">
-                <a className="" href="#">
-                  <i className="fab fa-facebook"></i>
-                </a>
-                <a className="pl-4" href="#">
-                  <i className="fab fa-instagram"></i>
-                </a>
-                <a className="pl-4" href="#">
-                  <i className="fab fa-twitter"></i>
-                </a>
-                <a className="pl-4" href="#">
-                  <i className="fab fa-linkedin"></i>
-                </a>
-              </div>
-            </div>
-          </div>
         </section>
 
         <aside className="w-full md:w-1/3 flex flex-col items-center px-3 ">
@@ -159,26 +120,14 @@ export default function BlogPost({ postData }) {
   );
 }
 
-export const getStaticProps = async ({ params }) => {
-  const post = await request({
-    query: BLOG_QUERY,
-    variables: { slug: params.slug },
-  });
-  return {
-    props: {
-      postData: post.article,
-    },
-  };
-};
-
 export const getStaticPaths = async () => {
   const slugQuery = await request({
-    query: PATHS_QUERY,
+    query: ALL_AUTHORS_PATHS,
   });
 
   let paths = [];
-  slugQuery.allArticles.map((p) =>
-    paths.push(`/blog/${p.kategori.sayfa}/${p.slug}`)
+  slugQuery.allAuthors.map((p) =>
+    paths.push(`/yazarlar/${p.authorLink}`)
   );
 
   return {
@@ -186,3 +135,18 @@ export const getStaticPaths = async () => {
     fallback: false,
   };
 };
+
+
+export const getStaticProps = async (context) => {
+  const slug = context.params.slug;
+  const authorData = await request({
+    query: AUTHOR_DATA_QUERY,
+    variables: { slug: slug },
+  });
+  return {
+    props: {
+      postData: authorData.author,
+    },
+  };
+};
+

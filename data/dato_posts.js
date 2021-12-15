@@ -181,3 +181,71 @@ const ALL_CAT_PATHS = `query allCatPaths {
 }`;
 
 export { ALL_CAT_PATHS };
+
+
+const ALL_AUTHORS_QUERY =`
+query MyQuery {
+  allAuthors {
+    id
+    gorsel {
+      responsiveImage {
+        alt
+        aspectRatio
+        base64
+        bgColor
+        height
+        sizes
+        src
+        srcSet
+        title
+        webpSrcSet
+        width
+      }
+    }
+    authorname
+    authorLink
+    aciklama
+  }
+}
+`;
+
+export { ALL_AUTHORS_QUERY };
+
+const ALL_AUTHORS_PATHS =`
+query MyQuery {
+  allAuthors {
+    authorLink
+  }
+}
+`;
+
+export { ALL_AUTHORS_PATHS };
+
+
+const AUTHOR_DATA_QUERY = `query MyQuery($slug: String) {
+    author(filter: {authorLink: {eq: $slug}}) {
+      id
+      authorname
+      authorLink
+      aciklama
+      gorsel {
+        responsiveImage {
+          width
+          webpSrcSet
+          title
+          srcSet
+          src
+          sizes
+          height
+          bgColor
+          base64
+          aspectRatio
+          alt
+        }
+      }
+    }
+  }`;
+
+export { AUTHOR_DATA_QUERY };
+  
+
